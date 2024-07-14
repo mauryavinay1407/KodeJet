@@ -21,7 +21,7 @@ app.post('/run',async(req,res)=>{
     const filepath=await generateFile(language,code);
     const output=await executeCpp(filepath);
     console.log(output);
-    return res.json({filepath,output});
+    return res.json({output});
     } catch (error) {
      return res.status(400).json({error})    
     }
