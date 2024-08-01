@@ -29,13 +29,13 @@ const App: React.FC = () => {
       setOutput('');
       setStatus('');
       setJobId('');
-      const response: any = await axios.post(`http://localhost:3000/run`, { language, code });
+      const response: any = await axios.post(`/api/run`, { language, code });
 
       setJobId(response.data.jobId);
       let intervalId: any;
 
       intervalId = setInterval(async () => {
-        const { data: dataRes } = await axios.get(`http://localhost:3000/status?id=${response.data.jobId}`);
+        const { data: dataRes } = await axios.get(`/api/status?id=${response.data.jobId}`);
 
        const { success, job, error } = dataRes;
                 

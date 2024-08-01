@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/status",async(req,res)=>{
+app.get("/api/status",async(req,res)=>{
   const jobId=req.query.id;
   if(!jobId)
     return res.status(400).json({success:false,error:"missing id query param"});
@@ -36,7 +36,7 @@ app.get("/status",async(req,res)=>{
   }
 });
 
-app.post("/run", async (req, res) => {
+app.post("/api/run", async (req, res) => {
   const { language = "cpp", code } = req.body;
   if (!code)
   {
@@ -72,7 +72,7 @@ app.post("/run", async (req, res) => {
     job.output = output;
     await job.save();
  
-    // console.log(job);
+  
   } catch (error) {
     if (job) {
       job.completedAt = new Date();
@@ -81,7 +81,7 @@ app.post("/run", async (req, res) => {
       await job.save();
     }
     console.log(error);
-    //  return res.status(500).json({error})
+   
   }
 });
 
