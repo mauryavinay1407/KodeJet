@@ -35,7 +35,11 @@ app.get("/api/status",async(req,res)=>{
     return res.status(400).json({success:false,error:JSON.stringify(error)});
   }
 });
-
+app.get("/api",(req,res)=>{
+  res.status(200).json({
+    msg:"Hello from server"
+  })
+})
 app.post("/api/run", async (req, res) => {
   const { language = "cpp", code } = req.body;
   if (!code)
