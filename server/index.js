@@ -7,6 +7,8 @@ require('dotenv').config();
 const { generateFile } = require("./generateFile");
 const { executeCpp } = require("./executeCpp");
 const { executePython } = require("./executePython");
+const {executeJs} = require("./executeJs");
+const {executeC}=require("./executeC");
 const Job = require("./models/job.model");
 
 mongoose
@@ -69,6 +71,14 @@ app.post("/api/run", async (req, res) => {
     //to run python file
     else if (language === "py") {
       output = await executePython(filepath);
+    }
+     //to run javascript file
+     else if (language === "js") {
+      output = await executeJs(filepath);
+    }
+     //to run c file
+     else if (language === "c") {
+      output = await executeC(filepath);
     }
 
     job.completedAt = new Date();
