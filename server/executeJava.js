@@ -2,27 +2,40 @@ const fs = require('fs');
 const { exec } = require('child_process');
 const path = require('path');
 
+const dirOutput = path.join(__dirname, 'outputs');
+
+if (!fs.existsSync(dirOutput)) {
+    fs.mkdirSync(dirOutput, { recursive: true });
+}
 
 const executeJava = (filepath) => {
-    const jobId = path.basename(filepath).split(".")[0];
-    const outputDir = path.dirname(filepath);
+    const fileDir = path.dirname(filepath);
+    const newFilePath = path.join(fileDir, 'Main.java');
 
     return new Promise((resolve, reject) => {
-        exec(
-            `javac "${filepath.replace(/\\/g, '\\\\')}" -d "${outputDir.replace(/\\/g, '\\\\')}" && java -cp "${outputDir.replace(/\\/g, '\\\\')}" ${jobId}`,
-            (error, stdout, stderr) => {
-                if (error) {
-                    reject({ error, stderr });
-                } else if (stderr) {
-                    reject(stderr);
-                } else {
-                    resolve(stdout);
-                }
-            }
-        );
+        fs.readFile(filepath, 'utf8', (err, data) => {
+            if (err) return reject(err);
+            const updatedCode = data.replace(/public\s+class\s+\w+/, `public class Main`);
+
+            fs.writeFile(newFilePath, updatedCode, 'utf8', (err) => {
+                if (err) return reject(err);
+                exec(
+                    `cd "${fileDir}" && javac Main.java && java Main`,
+                    (error, stdout, stderr) => {
+                        if (error) {
+                            reject({ error, stderr });
+                        } else if (stderr) {
+                            reject(stderr);
+                        } else {
+                            resolve(stdout);
+                        }
+                    }
+                );
+            });
+        });
     });
 }
 
 module.exports = {
     executeJava
-}
+};

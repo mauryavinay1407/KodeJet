@@ -15,7 +15,6 @@ const generateFile= async(format,code)=>{
    await fs.writeFileSync(filePath,code);
    return filePath;
 }
-console.log(dirCodes);
 module.exports={
     generateFile
 }

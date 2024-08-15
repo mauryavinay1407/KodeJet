@@ -10,6 +10,7 @@ const { executePython } = require("./executePython");
 const {executeJs} = require("./executeJs");
 const {executeC}=require("./executeC");
 const Job = require("./models/job.model");
+const { executeJava } = require("./executeJava");
 
 mongoose
   .connect(`${process.env.MONGO_URI}`)
@@ -80,7 +81,10 @@ app.post("/api/run", async (req, res) => {
      else if (language === "c") {
       output = await executeC(filepath);
     }
-
+       //to run java file
+      else if(language ==="java")
+        output=await executeJava(filepath);
+      
     job.completedAt = new Date();
     job.status = "success";
     job.output = output;
