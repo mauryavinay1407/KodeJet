@@ -6,7 +6,7 @@ export default defineConfig({
  server:{
    proxy: {
     '/api' : {
-      target:'https://kodejet-jpo6.onrender.com/',
+      target:'https://kodejet-backend.onrender.com/',
       changeOrigin: true,
       secure: true,
       rewrite: (path) => path.replace(/^\/api/, '/api')
